@@ -1,0 +1,18 @@
+{
+  "chmod": {
+    "project/.config/mytool/config.toml": "000"
+  },
+  "cwd": "project",
+  "description": "A recognized file that cannot be read is an unreadable error naming the path. The file is committed readable because a checkout will not preserve mode 000; the runner applies the mode from the chmod field and restores it afterward.",
+  "expectError": {
+    "kind": "unreadable",
+    "path": "project/.config/mytool/config.toml"
+  },
+  "home": "home",
+  "name": "unreadable-permissions",
+  "packageName": "mytool",
+  "skipOn": [
+    "win32"
+  ],
+  "specClause": "5"
+}

@@ -1,0 +1,24 @@
+{
+  "config": {
+    "proxy": {}
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "proxy"
+      ],
+      "path": "home/.config/mytool/config.toml",
+      "precedence": 1
+    },
+    {
+      "format": "json",
+      "keys": [
+        "proxy"
+      ],
+      "path": "project/.config/mytool/config.json",
+      "precedence": 2
+    }
+  ]
+}

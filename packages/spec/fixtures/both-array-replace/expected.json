@@ -1,0 +1,26 @@
+{
+  "config": {
+    "plugins": [
+      "c"
+    ]
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "plugins"
+      ],
+      "path": "home/.config/mytool/config.toml",
+      "precedence": 1
+    },
+    {
+      "format": "toml",
+      "keys": [
+        "plugins"
+      ],
+      "path": "project/.config/mytool/config.toml",
+      "precedence": 2
+    }
+  ]
+}

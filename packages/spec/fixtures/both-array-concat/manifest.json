@@ -1,0 +1,11 @@
+{
+  "cwd": "project",
+  "description": "Same tree as both-array-replace with arrayMerge concat: the higher layer appends and nothing is deduplicated.",
+  "home": "home",
+  "name": "both-array-concat",
+  "options": {
+    "arrayMerge": "concat"
+  },
+  "packageName": "mytool",
+  "specClause": "4.3"
+}

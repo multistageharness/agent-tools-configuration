@@ -1,0 +1,12 @@
+{
+  "cwd": "project",
+  "description": "A directory where config.toml belongs: the read fails, which is SPEC section 5's unreadable kind. Expresses the same clause as unreadable-permissions without permission bits, so it runs on every platform. See changelogs record 0001.",
+  "expectError": {
+    "kind": "unreadable",
+    "path": "project/.config/mytool/config.toml"
+  },
+  "home": "home",
+  "name": "unreadable-directory",
+  "packageName": "mytool",
+  "specClause": "5"
+}

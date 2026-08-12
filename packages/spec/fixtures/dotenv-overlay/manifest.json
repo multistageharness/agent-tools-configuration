@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "A .env beside config.toml in the same root overlays it, per the later-entries-win rule of section 2.5.",
+  "home": "home",
+  "name": "dotenv-overlay",
+  "packageName": "mytool",
+  "specClause": "2.5"
+}

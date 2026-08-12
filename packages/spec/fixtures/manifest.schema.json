@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://multistageharness.dev/config-discovery/fixtures/manifest.schema.json",
+  "title": "Conformance fixture manifest",
+  "description": "The inputs to one conformance case. See fixtures/README.md for the on-disk shape and PROBE.md for how these fields reach the probe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "description", "specClause", "packageName", "cwd", "home"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "MUST equal the fixture directory name. The runner rejects a mismatch.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this case asserts, in one sentence, in behavior terms.",
+      "minLength": 1
+    },
+    "specClause": {
+      "type": "string",
+      "description": "The SPEC.md section this expectation was hand-derived from, as a bare section number.",
+      "pattern": "^[0-9]+(\\.[0-9]+)*$"
+    },
+    "packageName": {
+      "type": "string",
+      "description": "Passed to the probe as --package-name.",
+      "minLength": 1
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Path relative to tree/ that becomes --cwd. May be nested, to exercise the upward walk.",
+      "pattern": "^[^/][^\\\\]*$"
+    },
+    "home": {
+      "type": "string",
+      "description": "Path relative to tree/ that becomes --home.",
+      "pattern": "^[^/][^\\\\]*$"
+    },
+    "env": {
+      "type": "object",
+      "description": "The complete environment for the prefixed env-var layer. Values may contain the token ${TREE}, which the runner replaces with the absolute path of this fixture's tree/ directory.",
+      "default": {},
+      "additionalProperties": { "type": "string" }
+    },
+    "options": {
+      "type": "object",
+      "description": "The load options from SPEC section 6, passed verbatim as --options.",
+      "default": {}
+    },
+    "expectError": {
+      "type": "object",
+      "description": "Presence means this case asserts a failure: the probe must exit 1 and emit an error document.",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "The closed error kind from SPEC section 5.",
+          "enum": [
+            "not-found",
+            "unreadable",
+            "malformed",
+            "duplicate-format",
+            "unknown-key",
+            "validation"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "Fixture-root-relative path the error must name. Omit when the error has no path."
+        }
+      }
+    },
+    "skipOn": {
+      "type": "array",
+      "description": "Platforms that cannot express this case. Matched against the runner's platform identifier.",
+      "default": [],
+      "uniqueItems": true,
+      "items": { "enum": ["win32", "darwin", "linux"] }
+    },
+    "chmod": {
+      "type": "object",
+      "description": "Files the runner sets to a given octal mode before the case and restores afterward. Keys are paths relative to tree/; values are octal mode strings such as \"000\".",
+      "default": {},
+      "additionalProperties": { "type": "string", "pattern": "^[0-7]{3,4}$" }
+    }
+  }
+}

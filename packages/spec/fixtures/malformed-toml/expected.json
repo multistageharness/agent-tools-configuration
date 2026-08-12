@@ -1,0 +1,6 @@
+{
+  "error": {
+    "kind": "malformed",
+    "path": "project/.config/mytool/config.toml"
+  }
+}

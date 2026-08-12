@@ -1,0 +1,11 @@
+{
+  "cwd": "project",
+  "description": "An absolute XDG_CONFIG_HOME replaces the default user-level root; the default ~/.config path is not also consulted.",
+  "env": {
+    "XDG_CONFIG_HOME": "${TREE}/home/xdg"
+  },
+  "home": "home",
+  "name": "xdg-config-home-set",
+  "packageName": "mytool",
+  "specClause": "2.4"
+}

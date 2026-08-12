@@ -1,0 +1,11 @@
+{
+  "cwd": "project",
+  "description": "The same tree as both-scalar-conflict under strategy first-match: the user root is suppressed entirely rather than merely losing.",
+  "home": "home",
+  "name": "first-match-strategy",
+  "options": {
+    "strategy": "first-match"
+  },
+  "packageName": "mytool",
+  "specClause": "3.2"
+}

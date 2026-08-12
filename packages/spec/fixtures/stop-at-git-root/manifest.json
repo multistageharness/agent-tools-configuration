@@ -1,0 +1,8 @@
+{
+  "cwd": "project/a/b",
+  "description": "Identical to ancestor-two-levels-up except for a .git marker at project/a, which stops the walk before the config above it is reached.",
+  "home": "home",
+  "name": "stop-at-git-root",
+  "packageName": "mytool",
+  "specClause": "2.3"
+}

@@ -1,0 +1,44 @@
+{
+  "config": {
+    "log": {
+      "level": "trace"
+    },
+    "port": 5432
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "log"
+      ],
+      "path": "home/.config/mytool/config.toml",
+      "precedence": 1
+    },
+    {
+      "format": "toml",
+      "keys": [
+        "log"
+      ],
+      "path": "project/.config/mytool/config.toml",
+      "precedence": 2
+    },
+    {
+      "format": "dotenv",
+      "keys": [
+        "log"
+      ],
+      "path": "project/.config/mytool/.env",
+      "precedence": 3
+    },
+    {
+      "format": "env",
+      "keys": [
+        "log",
+        "port"
+      ],
+      "path": "<env>",
+      "precedence": 4
+    }
+  ]
+}

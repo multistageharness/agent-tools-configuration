@@ -1,0 +1,38 @@
+[package]
+name = "config-discovery"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+license = "MIT"
+description = "Load a package's configuration from ./.config/<packageName>/ with a fallback to ~/.config/<packageName>/, layered so project-local wins."
+repository = "https://github.com/multistageharness/agent-tools-configuration"
+keywords = ["configuration", "figment", "xdg", "toml"]
+categories = ["config"]
+
+[dependencies]
+# figment is the parser. Every format it can read is behind one of its own features, so a
+# consumer pays only for the formats they enable.
+figment = { version = "0.10", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dotenvy = { version = "0.15", optional = true }
+
+[features]
+default = ["toml", "json"]
+toml = ["figment/toml"]
+json = ["figment/json"]
+yaml = ["figment/yaml"]
+# INI has no figment provider, so it is implemented in-crate; the feature gates that module
+# rather than a figment feature.
+ini = []
+dotenv = ["dep:dotenvy"]
+all = ["toml", "json", "yaml", "ini", "dotenv"]
+
+[dev-dependencies]
+tempfile = "3"
+
+# The conformance probe is built with --all-features (see conformance/run), so a fixture can
+# never pass because a format was compiled out.
+[[bin]]
+name = "probe"
+path = "src/bin/probe.rs"

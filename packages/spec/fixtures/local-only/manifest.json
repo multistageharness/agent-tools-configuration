@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "A project-local config directory alone is discovered and reported at precedence 2.",
+  "home": "home",
+  "name": "local-only",
+  "packageName": "mytool",
+  "specClause": "2.2"
+}

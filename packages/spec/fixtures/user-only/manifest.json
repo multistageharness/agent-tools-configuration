@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "A user-level config directory alone is discovered and reported at precedence 1.",
+  "home": "home",
+  "name": "user-only",
+  "packageName": "mytool",
+  "specClause": "2.4"
+}

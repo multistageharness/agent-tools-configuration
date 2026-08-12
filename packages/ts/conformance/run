@@ -1,0 +1,24 @@
+#!/bin/sh
+# The PROBE.md entry point for packages/ts.
+#
+# Builds only when dist/ is older than src/ — the runner spawns this once per fixture, and a
+# full tsc on every one of eighteen fixtures would turn a two-second suite into a minute.
+set -e
+cd "$(dirname "$0")/.."
+
+needs_build=0
+if [ ! -f dist/conformance/probe.js ]; then
+  needs_build=1
+else
+  # Any source file newer than the built probe means the build is stale.
+  if [ -n "$(find src -name '*.ts' -newer dist/conformance/probe.js -print -quit)" ]; then
+    needs_build=1
+  fi
+fi
+
+if [ "$needs_build" -eq 1 ]; then
+  # Build chatter is a diagnostic: stdout belongs to the JSON document alone (PROBE.md §4).
+  npm run --silent build >&2
+fi
+
+exec node dist/conformance/probe.js "$@"

@@ -1,0 +1,6 @@
+# EnvironmentPostProcessor is still registered through spring.factories in Spring Boot 3.x.
+# Auto-configuration moved to META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports,
+# but the post-processor callback did not: it runs before the auto-configuration machinery exists.
+# Verify against the Spring Boot version in spring/build.gradle.kts before changing this.
+org.springframework.boot.env.EnvironmentPostProcessor=\
+dev.configdiscovery.spring.ConfigDiscoveryEnvironmentPostProcessor

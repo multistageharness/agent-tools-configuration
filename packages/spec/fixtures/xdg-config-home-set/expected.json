@@ -1,0 +1,18 @@
+{
+  "config": {
+    "log": {
+      "level": "xdg"
+    }
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "log"
+      ],
+      "path": "home/xdg/mytool/config.toml",
+      "precedence": 1
+    }
+  ]
+}

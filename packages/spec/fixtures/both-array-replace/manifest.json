@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "Arrays replace wholesale by default: the higher layer array is the whole result.",
+  "home": "home",
+  "name": "both-array-replace",
+  "packageName": "mytool",
+  "specClause": "4.3"
+}

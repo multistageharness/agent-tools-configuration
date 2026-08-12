@@ -1,0 +1,3 @@
+#!/bin/sh
+# The reference probe's PROBE.md entry point. Harness only — see probe.mjs's header.
+exec node "$(dirname "$0")/probe.mjs" "$@"

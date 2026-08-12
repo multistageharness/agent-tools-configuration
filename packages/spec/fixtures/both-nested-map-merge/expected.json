@@ -1,0 +1,27 @@
+{
+  "config": {
+    "database": {
+      "host": "db.example.com",
+      "port": 6543
+    }
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "database"
+      ],
+      "path": "home/.config/mytool/config.toml",
+      "precedence": 1
+    },
+    {
+      "format": "toml",
+      "keys": [
+        "database"
+      ],
+      "path": "project/.config/mytool/config.toml",
+      "precedence": 2
+    }
+  ]
+}

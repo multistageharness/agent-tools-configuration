@@ -1,0 +1,18 @@
+{
+  "config": {
+    "log": {
+      "level": "info"
+    }
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "log"
+      ],
+      "path": "home/.config/mytool/config.toml",
+      "precedence": 1
+    }
+  ]
+}

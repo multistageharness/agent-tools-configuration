@@ -1,0 +1,6 @@
+{
+  "error": {
+    "kind": "unreadable",
+    "path": "project/.config/mytool/config.toml"
+  }
+}

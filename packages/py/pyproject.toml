@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "config-discovery"
+version = "0.1.0"
+description = "Load a package's configuration from ./.config/<packageName>/ with a fallback to ~/.config/<packageName>/, layered so project-local wins."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["configuration", "dynaconf", "xdg", "toml", "yaml"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Typing :: Typed",
+]
+# Exactly one runtime dependency. The `ini` extra pulls configobj, without which Dynaconf
+# silently returns {} for a config.ini and only warns. See packages/py/README.md.
+dependencies = ["dynaconf[ini]>=3.2"]
+
+[project.optional-dependencies]
+dev = ["pytest", "mypy", "ruff"]
+# For consumers who want to validate with Pydantic. The library never imports it.
+pydantic = ["pydantic>=2"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/config_discovery"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+strict = true
+files = ["src"]
+warn_unused_ignores = true
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[[tool.mypy.overrides]]
+# Dynaconf ships no py.typed marker, so its API is untyped from mypy's point of view. The
+# boundary is narrow on purpose: loaders.py is the only module that imports it.
+module = ["dynaconf.*"]
+ignore_missing_imports = true

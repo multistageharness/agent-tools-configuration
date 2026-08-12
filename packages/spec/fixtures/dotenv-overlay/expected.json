@@ -1,0 +1,26 @@
+{
+  "config": {
+    "log": {
+      "level": "from-dotenv"
+    }
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "log"
+      ],
+      "path": "project/.config/mytool/config.toml",
+      "precedence": 2
+    },
+    {
+      "format": "dotenv",
+      "keys": [
+        "log"
+      ],
+      "path": "project/.config/mytool/.env",
+      "precedence": 3
+    }
+  ]
+}

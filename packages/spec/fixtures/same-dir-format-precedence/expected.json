@@ -1,0 +1,38 @@
+{
+  "config": {
+    "from_json": true,
+    "from_toml": true,
+    "from_yaml": true,
+    "winner": "json"
+  },
+  "found": true,
+  "sources": [
+    {
+      "format": "toml",
+      "keys": [
+        "from_toml",
+        "winner"
+      ],
+      "path": "project/.config/mytool/config.toml",
+      "precedence": 2
+    },
+    {
+      "format": "yaml",
+      "keys": [
+        "from_yaml",
+        "winner"
+      ],
+      "path": "project/.config/mytool/config.yaml",
+      "precedence": 2
+    },
+    {
+      "format": "json",
+      "keys": [
+        "from_json",
+        "winner"
+      ],
+      "path": "project/.config/mytool/config.json",
+      "precedence": 2
+    }
+  ]
+}

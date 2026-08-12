@@ -1,0 +1,15 @@
+#!/bin/sh
+# The PROBE.md entry point for packages/py.
+#
+# -I is isolated mode: no user site-packages, no PYTHONPATH influence. The probe's result must be
+# a property of this checkout, not of the developer's environment.
+set -e
+cd "$(dirname "$0")/.."
+
+if [ -x .venv/bin/python ]; then
+  PY=.venv/bin/python
+else
+  PY=python3
+fi
+
+exec "$PY" -I conformance/probe.py "$@"

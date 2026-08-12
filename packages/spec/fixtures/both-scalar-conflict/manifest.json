@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "The project layer wins a scalar conflict, and the losing user layer is still reported in sources.",
+  "home": "home",
+  "name": "both-scalar-conflict",
+  "packageName": "mytool",
+  "specClause": "3.1"
+}

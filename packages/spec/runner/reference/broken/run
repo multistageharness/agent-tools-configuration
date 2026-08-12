@@ -1,0 +1,9 @@
+#!/bin/sh
+# The reference probe with one seeded defect: arrays are concatenated instead of replaced,
+# ignoring SPEC section 4.3. It exists so the conformance suite can be shown going red, and
+# going red in exactly one place — a suite that has only ever been seen green is not known to
+# detect anything.
+#
+# Same probe, one switch. If this passed the whole fixture set, the fixture set would be the
+# thing that is broken.
+REFERENCE_PROBE_DEFECT=array-concat exec node "$(dirname "$0")/../probe.mjs" "$@"

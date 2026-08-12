@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "Maps deep-merge key by key: the user layer host survives while the project layer overrides only port.",
+  "home": "home",
+  "name": "both-nested-map-merge",
+  "packageName": "mytool",
+  "specClause": "4.1"
+}

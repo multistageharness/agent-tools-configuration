@@ -1,0 +1,177 @@
+name: conformance
+
+# The claim this repository makes is that five language packages behave identically. This
+# workflow is what turns that from a claim into a test result, on every push.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.12"
+  GO_VERSION: "1.23"
+  JAVA_VERSION: "21"
+  RUST_VERSION: "1.83"
+
+jobs:
+  # The harness gates everything. Five green language jobs produced by a runner that cannot
+  # detect a failure is worse than a red build, so the runner's own tests - including the
+  # seeded-regression check, where a deliberately broken probe must fail exactly one fixture -
+  # run first and every other job needs them.
+  spec:
+    name: spec harness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Run the runner's own tests
+        run: node --test packages/spec/runner/run.test.mjs
+      - name: Prove the reference probe passes every fixture
+        run: node packages/spec/runner/run.mjs --probe-path packages/spec/runner/reference
+      - name: Prove the suite catches a seeded regression
+        run: |
+          if node packages/spec/runner/run.mjs --probe-path packages/spec/runner/reference/broken; then
+            echo "::error::the broken reference probe passed - the suite cannot detect a regression"
+            exit 1
+          fi
+          echo "the broken probe failed, as it must"
+
+  conformance:
+    name: ${{ matrix.lang }}
+    needs: spec
+    runs-on: ubuntu-latest
+    strategy:
+      # One language's failure must not hide another's.
+      fail-fast: false
+      matrix:
+        lang: [ts, py, golang, java, rust]
+    steps:
+      - uses: actions/checkout@v4
+
+      # The guard: a language package that does not exist yet is skipped, and the skip is
+      # printed rather than silent. This is what lets the workflow land before the languages do.
+      - name: Check whether packages/${{ matrix.lang }} is present
+        id: guard
+        run: |
+          if [ -d "packages/${{ matrix.lang }}" ] && [ -e "packages/${{ matrix.lang }}/conformance/run" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "SKIP: packages/${{ matrix.lang }} not present"
+            echo "SKIP: packages/${{ matrix.lang }} not present" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Every language job needs Node: the conformance runner is a Node script.
+      - uses: actions/setup-node@v4
+        if: steps.guard.outputs.present == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: ${{ matrix.lang == 'ts' && 'npm' || '' }}
+          cache-dependency-path: packages/ts/package-lock.json
+
+      - name: Set up Python
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'py'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          # Keyed on the manifest that actually declares the dependencies: a cache keyed on
+          # something that never changes never invalidates, which is worse than no cache.
+          cache-dependency-path: packages/py/pyproject.toml
+
+      - name: Set up Go
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'golang'
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: packages/golang/go.sum
+
+      - name: Set up the JDK
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'java'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Set up Gradle
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'java'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          build-root-directory: packages/java
+
+      - name: Set up Rust
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'rust'
+        run: rustup toolchain install ${{ env.RUST_VERSION }} --profile minimal --component clippy
+
+      - name: Cache cargo
+        if: steps.guard.outputs.present == 'true' && matrix.lang == 'rust'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/rust/target
+          key: cargo-${{ runner.os }}-${{ env.RUST_VERSION }}-${{ hashFiles('packages/rust/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-${{ env.RUST_VERSION }}-
+
+      - name: Install dependencies
+        if: steps.guard.outputs.present == 'true'
+        working-directory: packages/${{ matrix.lang }}
+        run: |
+          case "${{ matrix.lang }}" in
+            ts)     npm ci ;;
+            py)     python -m pip install --upgrade pip && pip install -e ".[dev]" ;;
+            golang) go mod download ;;
+            java)   ./gradlew --quiet :core:probeJar ;;
+            rust)   cargo +${{ env.RUST_VERSION }} build --release --all-features --bin probe ;;
+          esac
+
+      - name: Conformance suite
+        if: steps.guard.outputs.present == 'true'
+        run: node packages/spec/runner/run.mjs --probe ${{ matrix.lang }}
+
+      - name: The package's own tests
+        if: steps.guard.outputs.present == 'true'
+        working-directory: packages/${{ matrix.lang }}
+        run: |
+          case "${{ matrix.lang }}" in
+            ts)     npm test ;;
+            py)     pytest ;;
+            golang) go test ./... ;;
+            java)   ./gradlew test ;;
+            rust)   cargo +${{ env.RUST_VERSION }} test --all-features ;;
+          esac
+
+  summary:
+    name: summary
+    needs: [spec, conformance]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Report which languages are present
+        run: |
+          {
+            echo "## Conformance"
+            echo
+            echo '```'
+            node packages/spec/runner/run.mjs
+            echo '```'
+            echo
+            echo "| Job | Result |"
+            echo "| --- | --- |"
+            echo "| spec harness | ${{ needs.spec.result }} |"
+            echo "| conformance matrix | ${{ needs.conformance.result }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Fail when anything upstream failed
+        if: needs.spec.result != 'success' || needs.conformance.result != 'success'
+        run: exit 1

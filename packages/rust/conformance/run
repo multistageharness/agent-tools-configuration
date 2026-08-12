@@ -1,0 +1,23 @@
+#!/bin/sh
+# The PROBE.md entry point for packages/rust.
+#
+# --all-features, so a fixture can never pass because a format was compiled out. Builds only when
+# the binary is older than the sources: not `cargo run`, which re-checks the whole graph on every
+# one of eighteen fixtures.
+set -e
+cd "$(dirname "$0")/.."
+
+BIN=target/release/probe
+needs_build=0
+if [ ! -x "$BIN" ]; then
+  needs_build=1
+elif [ -n "$(find src Cargo.toml -newer "$BIN" -print -quit 2>/dev/null)" ]; then
+  needs_build=1
+fi
+
+if [ "$needs_build" -eq 1 ]; then
+  # Build chatter is a diagnostic: stdout belongs to the JSON document alone (PROBE.md §4).
+  cargo build --release --all-features --bin probe >&2
+fi
+
+exec "$BIN" "$@"

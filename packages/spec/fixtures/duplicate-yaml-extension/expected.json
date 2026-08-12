@@ -1,0 +1,6 @@
+{
+  "error": {
+    "kind": "duplicate-format",
+    "path": "project/.config/mytool"
+  }
+}

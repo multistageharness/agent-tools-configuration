@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "No config anywhere is not an error: defaults are returned with found false and an empty sources list.",
+  "home": "home",
+  "name": "neither-present",
+  "packageName": "mytool",
+  "specClause": "5"
+}

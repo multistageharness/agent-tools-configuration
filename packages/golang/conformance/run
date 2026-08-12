@@ -1,0 +1,21 @@
+#!/bin/sh
+# The PROBE.md entry point for packages/golang.
+#
+# Builds only when the binary is older than the sources. The runner spawns this once per fixture,
+# and `go build` on every one of eighteen fixtures turns a two-second suite into a slow one.
+set -e
+cd "$(dirname "$0")/.."
+
+needs_build=0
+if [ ! -x .probe ]; then
+  needs_build=1
+elif [ -n "$(find . -name '*.go' -newer .probe -print -quit)" ] || [ go.sum -nt .probe ]; then
+  needs_build=1
+fi
+
+if [ "$needs_build" -eq 1 ]; then
+  # Build chatter is a diagnostic: stdout belongs to the JSON document alone (PROBE.md section 4).
+  go build -o .probe ./conformance >&2
+fi
+
+exec ./.probe "$@"

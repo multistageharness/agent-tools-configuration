@@ -1,0 +1,8 @@
+{
+  "cwd": "project/a/b",
+  "description": "The upward walk climbs two levels to find .config/mytool in a grandparent directory.",
+  "home": "home",
+  "name": "ancestor-two-levels-up",
+  "packageName": "mytool",
+  "specClause": "2.2"
+}

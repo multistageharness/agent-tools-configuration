@@ -1,0 +1,2 @@
+winner = "toml"
+from_toml = true

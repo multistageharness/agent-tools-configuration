@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "An explicit null in the higher layer removes the key entirely. The project layer is JSON because TOML has no null literal.",
+  "home": "home",
+  "name": "explicit-null-unsets",
+  "packageName": "mytool",
+  "specClause": "4.4"
+}

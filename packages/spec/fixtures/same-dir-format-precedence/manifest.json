@@ -1,0 +1,8 @@
+{
+  "cwd": "project",
+  "description": "TOML, YAML and JSON in one directory all load; the shared key comes from config.json as the last of the three in the section 2.5 order.",
+  "home": "home",
+  "name": "same-dir-format-precedence",
+  "packageName": "mytool",
+  "specClause": "2.5"
+}

@@ -1,0 +1,12 @@
+{
+  "cwd": "project",
+  "description": "config.yaml beside config.yml in one directory is a duplicate-format error naming the directory, not a silent pick.",
+  "expectError": {
+    "kind": "duplicate-format",
+    "path": "project/.config/mytool"
+  },
+  "home": "home",
+  "name": "duplicate-yaml-extension",
+  "packageName": "mytool",
+  "specClause": "2.5"
+}

@@ -1,0 +1,10 @@
+# The published tarball is the build output plus README and LICENSE. Everything that exists to
+# develop or verify the package stays in the repository.
+src/
+conformance/
+dist/conformance/
+*.test.ts
+*.test.js
+*.tsbuildinfo
+vitest.config.ts
+tsconfig.json

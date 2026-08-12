@@ -1,0 +1,23 @@
+# All five ecosystems are covered up front, so no language package has to amend this file.
+
+# TypeScript / Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Java
+build/
+.gradle/
+
+# Rust and Java (Maven)
+target/
+
+# macOS
+.DS_Store
+.probe

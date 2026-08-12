@@ -1,0 +1,12 @@
+{
+  "cwd": "project",
+  "description": "An unparseable config.toml is an error naming the path, never a silent fallback to defaults. Message text is parser-specific and is not compared.",
+  "expectError": {
+    "kind": "malformed",
+    "path": "project/.config/mytool/config.toml"
+  },
+  "home": "home",
+  "name": "malformed-toml",
+  "packageName": "mytool",
+  "specClause": "5"
+}

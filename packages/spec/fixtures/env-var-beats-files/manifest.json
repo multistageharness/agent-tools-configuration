@@ -1,0 +1,12 @@
+{
+  "cwd": "project",
+  "description": "Prefixed environment variables outrank every file layer, __ splits nesting, and MYTOOL_PORT=5432 coerces to the number 5432.",
+  "env": {
+    "MYTOOL_LOG__LEVEL": "trace",
+    "MYTOOL_PORT": "5432"
+  },
+  "home": "home",
+  "name": "env-var-beats-files",
+  "packageName": "mytool",
+  "specClause": "4.5"
+}
